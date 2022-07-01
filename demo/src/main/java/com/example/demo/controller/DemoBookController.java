@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,21 +24,30 @@ public class DemoBookController {
 
 	@Autowired
 	DemoBookRepository demoBookRepository;
-
+	// save book details in db		
 	@PostMapping("/savebookdetails")
 	@ResponseStatus(HttpStatus.CREATED)
 		public String saveBookDetails(@RequestBody DemoBook demobook, DemoBookResponse demoBookResponse) {
 		DemoBookResponse demobookres = new DemoBookResponse();
 		demobookres= demoBookService.saveBookService(demobook,demoBookResponse);
-		System.out.println(demobook.getTitle()+"  "+demobook.getAuthor()+"  "+demobook.getPrice());
+		System.out.println(demobook.getId()+" "+demobook.getTitle()+"  "+demobook.getAuthor()+"  "+demobook.getPrice());
 			  return demobookres.getDemobookstatusresponse();
 		}
 
+	// get books details in db	
 	@GetMapping("/getbookdetails")
 	@ResponseStatus(HttpStatus.FOUND)
 	public List<DemoBook> getBookDetails() {
 
 		return demoBookService.getBookDetailsService();
+	}
+	
+	// get book details in db	
+	@GetMapping("/getbookdetailsById/{id}")
+	@ResponseStatus(HttpStatus.FOUND)
+	public DemoBook getBookbyId(@PathVariable("id")  int id) {
+		return demoBookService.getBookDetailsById(id);
+		
 	}
 
 }
